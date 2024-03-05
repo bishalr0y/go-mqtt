@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/Jeffail/gabs"
 	MQTT "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -14,12 +15,22 @@ type SensorData struct {
 	Unit string
 }
 
+type MqttMessage struct {
+	ID        string `json:"id"`
+	NODE_ID   string `json:"node_id"`
+	METHOD    string `json:"method"`
+	CATEGORY  string `json:"category"`
+	ACTION    string `json:"action"`
+	PAYLOAD   string `json:"payload"`
+	TIMESTAMP string `json:"timestamp"`
+}
+
 func main() {
 	broker := "tcp://test.mosquitto.org:1883"
 	topic := "test_topic"
 	qos := 1
 
-	var sensorData SensorData
+	var mqttMessage MqttMessage
 
 	opts := MQTT.NewClientOptions().AddBroker(broker)
 	opts.SetClientID("subscriber")
@@ -31,10 +42,18 @@ func main() {
 	}
 
 	token := client.Subscribe(topic, byte(qos), func(client MQTT.Client, msg MQTT.Message) {
-		fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
-		json.Unmarshal(msg.Payload(), &sensorData)
+		// fmt.Printf("Received message: %s from topic: %s\n", msg.Payload(), msg.Topic())
+		json.Unmarshal(msg.Payload(), &mqttMessage)
 
-		fmt.Println(sensorData.Id, sensorData.Data, sensorData.Unit)
+		fmt.Println(mqttMessage)
+
+		// parsing the payload object (unkown format)
+		parcedPayload, err := gabs.ParseJSON([]byte(mqttMessage.PAYLOAD))
+
+		if err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println(parcedPayload.Path("sensor_id"))
 	})
 	token.Wait()
 	fmt.Printf("Subscribed to topic: %s\n", topic)

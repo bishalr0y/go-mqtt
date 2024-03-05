@@ -24,7 +24,17 @@ func main() {
 
 	for {
 		// text := fmt.Sprintf("Message sent at: %v", rand.Intn(1000))
-		text := `{"id": "u8ia","data": "10","unit": "kg"}`
+		// text := `{"id": "u8ia","data": "10","unit": "kg"}`
+
+		text := `{
+			"id": "somemessageid101",
+			"node_id": "somenodeid404",
+			"method": "COMMAND",
+			"category": "SENSOR",
+			"action": "START",
+			"payload": "{\"sensor_id\": \"sens101\",\"data\": \"65\",\"unit\": \"kg\"}",
+			"timestamp": "Tue Mar 05 2024 14:33:06 GMT+0530 (India Standard Time)"
+		}`
 		token := client.Publish(topic, byte(qos), false, text)
 		token.Wait()
 		fmt.Printf("Published: %s\n", text)

@@ -3,6 +3,7 @@ module github.com/bishalr0y/go-mqtt
 go 1.21.3
 
 require (
+	github.com/Jeffail/gabs v1.4.0 // indirect
 	github.com/eclipse/paho.mqtt.golang v1.4.3 // indirect
 	github.com/gorilla/websocket v1.5.1 // indirect
 	golang.org/x/net v0.21.0 // indirect
