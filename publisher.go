@@ -32,7 +32,7 @@ func main() {
 			"method": "COMMAND",
 			"category": "SENSOR",
 			"action": "START",
-			"payload": "{\"sensor_id\": \"sens101\",\"data\": \"65\",\"unit\": \"kg\"}",
+			"payload": "{\"sensor_id\": \"sens101\",\"data\": \"65\",\"unit\": \"kg\",\"value\":\"ON\"}",
 			"timestamp": "Tue Mar 05 2024 14:33:06 GMT+0530 (India Standard Time)"
 		}`
 		token := client.Publish(topic, byte(qos), false, text)
